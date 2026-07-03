@@ -1,0 +1,107 @@
+package com.sumanth.placementportal.config;
+
+import com.sumanth.placementportal.jwt.JwtAuthenticationFilter;
+import com.sumanth.placementportal.security.CustomUserDetailsService;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
+import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+@Configuration
+public class SecurityConfig {
+
+    @Autowired
+    private CustomUserDetailsService customUserDetailsService;
+
+    @Autowired
+    private JwtAuthenticationFilter jwtAuthenticationFilter;
+
+    @Bean
+    public BCryptPasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public AuthenticationProvider authenticationProvider() {
+
+        DaoAuthenticationProvider authProvider =
+                new DaoAuthenticationProvider();
+
+        authProvider.setUserDetailsService(
+                customUserDetailsService
+        );
+
+        authProvider.setPasswordEncoder(
+                passwordEncoder()
+        );
+
+        return authProvider;
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManager(
+            AuthenticationConfiguration config)
+            throws Exception {
+
+        return config.getAuthenticationManager();
+    }
+
+    @Bean
+    public SecurityFilterChain securityFilterChain(
+            HttpSecurity http)
+            throws Exception {
+
+        http
+                .csrf(csrf -> csrf.disable())
+
+                .authorizeHttpRequests(auth -> auth
+
+                        // PUBLIC URLS
+                        .requestMatchers(
+                                "/register",
+                                "/login",
+                                "/token",
+                                "/images/**"
+                        ).permitAll()
+
+                        // ADMIN
+                        .requestMatchers("/admin/**")
+                        .hasRole("ADMIN")
+
+                        // STUDENT
+                        .requestMatchers("/student/**")
+                        .hasRole("STUDENT")
+
+                        // RECRUITER
+                        .requestMatchers("/recruiter/**")
+                        .hasRole("RECRUITER")
+
+                        // EVERYTHING ELSE
+                        .anyRequest()
+                        .authenticated()
+                )
+
+                .authenticationProvider(
+                        authenticationProvider()
+                )
+
+                .addFilterBefore(
+                        jwtAuthenticationFilter,
+                        UsernamePasswordAuthenticationFilter.class
+                );
+
+        return http.build();
+    }
+}
