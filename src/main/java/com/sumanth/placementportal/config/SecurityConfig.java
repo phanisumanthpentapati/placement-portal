@@ -13,11 +13,16 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+
+import java.util.Arrays;
 
 @Configuration
 public class SecurityConfig {
@@ -39,13 +44,8 @@ public class SecurityConfig {
         DaoAuthenticationProvider authProvider =
                 new DaoAuthenticationProvider();
 
-        authProvider.setUserDetailsService(
-                customUserDetailsService
-        );
-
-        authProvider.setPasswordEncoder(
-                passwordEncoder()
-        );
+        authProvider.setUserDetailsService(customUserDetailsService);
+        authProvider.setPasswordEncoder(passwordEncoder());
 
         return authProvider;
     }
@@ -59,43 +59,70 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(
-            HttpSecurity http)
+    public CorsConfigurationSource corsConfigurationSource() {
+
+        return request -> {
+
+            CorsConfiguration configuration = new CorsConfiguration();
+
+            configuration.setAllowedOrigins(
+                    Arrays.asList("http://localhost:5173")
+            );
+
+            configuration.setAllowedMethods(
+                    Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS")
+            );
+
+            configuration.setAllowedHeaders(
+                    Arrays.asList("*")
+            );
+
+            configuration.setAllowCredentials(true);
+
+            return configuration;
+        };
+    }
+
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http)
             throws Exception {
 
         http
+
                 .csrf(csrf -> csrf.disable())
+
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+
+                .sessionManagement(session ->
+                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
                 .authorizeHttpRequests(auth -> auth
 
-                        // PUBLIC URLS
                         .requestMatchers(
-                                "/register",
-                                "/login",
-                                "/token",
+                                "/",
+                                "/error",
+                                "/api/auth/**",
+                                "/api/students/**",
+                                "/api/recruiters/**",
+                                "/companies/**",
                                 "/images/**"
                         ).permitAll()
 
-                        // ADMIN
                         .requestMatchers("/admin/**")
                         .hasRole("ADMIN")
 
-                        // STUDENT
                         .requestMatchers("/student/**")
                         .hasRole("STUDENT")
 
-                        // RECRUITER
                         .requestMatchers("/recruiter/**")
                         .hasRole("RECRUITER")
 
-                        // EVERYTHING ELSE
                         .anyRequest()
                         .authenticated()
+
                 )
 
-                .authenticationProvider(
-                        authenticationProvider()
-                )
+                .authenticationProvider(authenticationProvider())
 
                 .addFilterBefore(
                         jwtAuthenticationFilter,

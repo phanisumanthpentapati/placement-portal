@@ -17,6 +17,10 @@ public class UserService {
 
     public User registerUser(User user) {
 
+        if (userRepository.existsByEmail(user.getEmail())) {
+            throw new RuntimeException("Email already exists");
+        }
+
         user.setPassword(
                 passwordEncoder.encode(user.getPassword())
         );
@@ -26,7 +30,8 @@ public class UserService {
 
     public String login(String email, String password) {
 
-        User user = userRepository.findByEmail(email);
+        User user = userRepository.findByEmail(email)
+                .orElse(null);
 
         if (user != null &&
                 passwordEncoder.matches(password, user.getPassword())) {
@@ -46,10 +51,13 @@ public class UserService {
             user.setUsername(updatedUser.getUsername());
             user.setEmail(updatedUser.getEmail());
 
-            user.setPassword(
-                    passwordEncoder.encode(updatedUser.getPassword())
-            );
+            if (updatedUser.getPassword() != null &&
+                    !updatedUser.getPassword().isBlank()) {
 
+                user.setPassword(
+                        passwordEncoder.encode(updatedUser.getPassword())
+                );
+            }
             user.setRole(updatedUser.getRole());
 
             return userRepository.save(user);

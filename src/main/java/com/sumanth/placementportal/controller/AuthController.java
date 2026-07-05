@@ -26,6 +26,7 @@
     import java.util.List;
 
     @RestController
+    @RequestMapping("/api/auth")
     public class AuthController {
 
         @Autowired
@@ -73,7 +74,12 @@
                     )
             );
 
-            return jwtService.generateToken(user.getEmail());
+            User loggedUser =
+                    userRepository.findByEmail(user.getEmail())
+                            .orElseThrow(() ->
+                                    new RuntimeException("User Not Found"));
+
+            return jwtService.generateToken(loggedUser.getEmail());
         }
         @PostMapping("/recruiter/job")
         public JobDescription createJob(

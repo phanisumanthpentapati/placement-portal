@@ -8,18 +8,24 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@RequestMapping("/api/students")
+@CrossOrigin(origins = "http://localhost:5173")
 public class StudentController {
 
     @Autowired
     private StudentService studentService;
 
-    @GetMapping("/students")
-    public List<Student> getStudents() {
+    @GetMapping
+    public List<Student> getAllStudents() {
         return studentService.getAllStudents();
     }
 
-    @PostMapping("/students")
-    public Student addStudent(@RequestBody Student student) {
+    @PostMapping("/register")
+    public Student registerStudent(@RequestBody Student student) {
+
+        System.out.println("===== REGISTER API HIT =====");
+        System.out.println(student.getName());
+
         return studentService.saveStudent(student);
     }
 }

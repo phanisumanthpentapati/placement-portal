@@ -33,22 +33,27 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             FilterChain filterChain)
             throws ServletException, IOException {
 
-        // Print all headers
+        // Print all request headers (Optional)
         Enumeration<String> headerNames = request.getHeaderNames();
 
         while (headerNames.hasMoreElements()) {
             String header = headerNames.nextElement();
-            System.out.println(
-                    header + " = " + request.getHeader(header)
-            );
+            System.out.println(header + " = " + request.getHeader(header));
         }
 
         String path = request.getServletPath();
 
-        // Public APIs
-        if (path.equals("/login")
+        System.out.println("Request Path : " + path);
+
+        // Public APIs (Skip JWT)
+        if (path.equals("/")
+                || path.startsWith("/api")
+                || path.equals("/login")
                 || path.equals("/register")
-                || path.equals("/token")) {
+                || path.equals("/token")
+                || path.startsWith("/images")) {
+
+            System.out.println("Public API - JWT Skipped");
 
             filterChain.doFilter(request, response);
             return;
@@ -56,21 +61,18 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         String authHeader = request.getHeader("Authorization");
 
-        System.out.println("Authorization Header = " + authHeader);
+        System.out.println("Authorization Header : " + authHeader);
 
         String token = null;
         String email = null;
 
-        if (authHeader != null &&
-                authHeader.startsWith("Bearer ")) {
+        if (authHeader != null && authHeader.startsWith("Bearer ")) {
 
             token = authHeader.substring(7);
 
-            System.out.println("Token = " + token);
-
             email = jwtService.extractUsername(token);
 
-            System.out.println("Email = " + email);
+            System.out.println("Email : " + email);
         }
 
         if (email != null &&
@@ -79,37 +81,22 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             UserDetails userDetails =
                     customUserDetailsService.loadUserByUsername(email);
 
-            System.out.println(
-                    "User Found = " + userDetails.getUsername()
-            );
-
             if (jwtService.validateToken(token, userDetails)) {
 
-                System.out.println("Token Valid");
-
-                UsernamePasswordAuthenticationToken authToken =
+                UsernamePasswordAuthenticationToken authentication =
                         new UsernamePasswordAuthenticationToken(
                                 userDetails,
                                 null,
-                                userDetails.getAuthorities()
-                        );
+                                userDetails.getAuthorities());
 
-                authToken.setDetails(
+                authentication.setDetails(
                         new WebAuthenticationDetailsSource()
-                                .buildDetails(request)
-                );
+                                .buildDetails(request));
 
                 SecurityContextHolder.getContext()
-                        .setAuthentication(authToken);
+                        .setAuthentication(authentication);
 
-                System.out.println(
-                        "Authorities = "
-                                + authToken.getAuthorities()
-                );
-
-                System.out.println(
-                        "Authentication Set Successfully"
-                );
+                System.out.println("JWT Authentication Successful");
             }
         }
 

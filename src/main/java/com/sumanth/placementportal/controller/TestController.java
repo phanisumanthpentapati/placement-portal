@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@RequestMapping("/api")
 public class TestController {
 
     @Autowired
@@ -27,16 +28,20 @@ public class TestController {
     public Student addStudent(@RequestBody Student student) {
         return studentService.saveStudent(student);
     }
+
     @GetMapping("/students/{id}")
     public Student getStudentById(@PathVariable Long id) {
         return studentService.getStudentById(id);
     }
+
     @PutMapping("/students/{id}")
-    public Student updateStudent(@PathVariable Long id,
-                                 @RequestBody Student student) {
+    public Student updateStudent(
+            @PathVariable Long id,
+            @RequestBody Student student) {
 
         return studentService.updateStudent(id, student);
     }
+
     @DeleteMapping("/students/{id}")
     public String deleteStudent(@PathVariable Long id) {
 

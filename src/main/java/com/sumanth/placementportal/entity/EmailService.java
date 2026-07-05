@@ -23,7 +23,7 @@ public class EmailService {
 
         message.setText(
                 "Dear Student,\n\n" +
-                        "Congratulations! You have been selected in the placement process.\n\n" +
+                        "Your Application has been send successfully.Our team will update you. \n\n" +
                         "Best Regards,\n" +
                         "Placement Portal Team"
         );
