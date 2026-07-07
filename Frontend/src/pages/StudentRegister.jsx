@@ -26,14 +26,23 @@ function StudentRegister() {
 
     const handleRegister = async () => {
 
+        if (
+            !formData.username ||
+            !formData.email ||
+            !formData.password
+        ) {
+            alert("Please fill all required fields.");
+            return;
+        }
+
         if (formData.password !== formData.confirmPassword) {
-            alert("Passwords do not match");
+            alert("Passwords do not match.");
             return;
         }
 
         try {
 
-            await api.post("/api/auth/register", {
+            await api.post("/auth/register", {
 
                 username: formData.username,
                 email: formData.email,
@@ -42,32 +51,47 @@ function StudentRegister() {
 
             });
 
-            alert("Registration Successful");
+            alert("Registration Successful!");
 
             navigate("/login");
 
         } catch (error) {
 
-              console.log("Registration Error:", error);
+            console.error(error);
 
-              if (error.response) {
-                  console.log("Status:", error.response.status);
-                  console.log("Data:", error.response.data);
-                  alert(
-                      "Status: " +
-                      error.response.status +
-                      "\n" +
-                      JSON.stringify(error.response.data)
-                  );
-              } else {
-                  alert(error.message);
-              }
-          }
-      }
+            if (
+                error.response &&
+                error.response.data &&
+                error.response.data.message === "Email already exists"
+            ) {
 
+                alert("Email already exists. Please login or use another email.");
+
+            }
+            else if (
+                error.response &&
+                error.response.data &&
+                typeof error.response.data === "string" &&
+                error.response.data.includes("Email already exists")
+            ) {
+
+                alert("Email already exists. Please login or use another email.");
+
+            }
+            else {
+
+                alert("Registration Failed.");
+
+            }
+
+        }
+
+    };
 
     return (
+
         <div className="container mt-5">
+
             <div className="row justify-content-center">
 
                 <div className="col-md-8">
@@ -81,7 +105,11 @@ function StudentRegister() {
                         <div className="row">
 
                             <div className="col-md-6 mb-3">
-                                <label className="form-label">Full Name</label>
+
+                                <label className="form-label">
+                                    Full Name
+                                </label>
+
                                 <input
                                     type="text"
                                     name="username"
@@ -90,10 +118,15 @@ function StudentRegister() {
                                     value={formData.username}
                                     onChange={handleChange}
                                 />
+
                             </div>
 
                             <div className="col-md-6 mb-3">
-                                <label className="form-label">Email</label>
+
+                                <label className="form-label">
+                                    Email
+                                </label>
+
                                 <input
                                     type="email"
                                     name="email"
@@ -102,10 +135,15 @@ function StudentRegister() {
                                     value={formData.email}
                                     onChange={handleChange}
                                 />
+
                             </div>
 
                             <div className="col-md-6 mb-3">
-                                <label className="form-label">Password</label>
+
+                                <label className="form-label">
+                                    Password
+                                </label>
+
                                 <input
                                     type="password"
                                     name="password"
@@ -114,10 +152,15 @@ function StudentRegister() {
                                     value={formData.password}
                                     onChange={handleChange}
                                 />
+
                             </div>
 
                             <div className="col-md-6 mb-3">
-                                <label className="form-label">Confirm Password</label>
+
+                                <label className="form-label">
+                                    Confirm Password
+                                </label>
+
                                 <input
                                     type="password"
                                     name="confirmPassword"
@@ -126,10 +169,14 @@ function StudentRegister() {
                                     value={formData.confirmPassword}
                                     onChange={handleChange}
                                 />
+
                             </div>
 
                             <div className="col-md-6 mb-3">
-                                <label className="form-label">Branch</label>
+
+                                <label className="form-label">
+                                    Branch
+                                </label>
 
                                 <select
                                     name="branch"
@@ -148,7 +195,10 @@ function StudentRegister() {
                             </div>
 
                             <div className="col-md-6 mb-3">
-                                <label className="form-label">CGPA</label>
+
+                                <label className="form-label">
+                                    CGPA
+                                </label>
 
                                 <input
                                     type="number"
@@ -158,10 +208,14 @@ function StudentRegister() {
                                     value={formData.cgpa}
                                     onChange={handleChange}
                                 />
+
                             </div>
 
                             <div className="col-md-6 mb-3">
-                                <label className="form-label">Phone Number</label>
+
+                                <label className="form-label">
+                                    Phone Number
+                                </label>
 
                                 <input
                                     type="text"
@@ -171,10 +225,14 @@ function StudentRegister() {
                                     value={formData.phone}
                                     onChange={handleChange}
                                 />
+
                             </div>
 
                             <div className="col-md-6 mb-3">
-                                <label className="form-label">Graduation Year</label>
+
+                                <label className="form-label">
+                                    Graduation Year
+                                </label>
 
                                 <input
                                     type="number"
@@ -184,6 +242,7 @@ function StudentRegister() {
                                     value={formData.graduationYear}
                                     onChange={handleChange}
                                 />
+
                             </div>
 
                         </div>
@@ -200,7 +259,9 @@ function StudentRegister() {
                 </div>
 
             </div>
+
         </div>
+
     );
 }
 

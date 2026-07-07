@@ -10,23 +10,28 @@ import java.io.File;
 @Service
 public class ResumeAnalyzerService {
 
-    public int analyzeResume(String filePath)
-            throws Exception {
+    public String extractResumeText(String filePath) throws Exception {
 
         File pdfFile = new File(filePath);
 
-        PDDocument document =
-                Loader.loadPDF(pdfFile);
+        if (!pdfFile.exists()) {
+            throw new Exception("Resume file not found.");
+        }
 
-        PDFTextStripper stripper =
-                new PDFTextStripper();
+        PDDocument document = Loader.loadPDF(pdfFile);
 
-        String text =
-                stripper.getText(document)
-                        .toLowerCase();
-        System.out.println(text);
+        PDFTextStripper stripper = new PDFTextStripper();
+
+        String text = stripper.getText(document);
 
         document.close();
+
+        return text.toLowerCase();
+    }
+
+    public int analyzeResume(String filePath) throws Exception {
+
+        String text = extractResumeText(filePath);
 
         int score = 0;
 

@@ -8,12 +8,9 @@ function Navbar() {
     const role = localStorage.getItem("role");
 
     const logout = () => {
-
         localStorage.removeItem("token");
         localStorage.removeItem("role");
-
         navigate("/");
-
     };
 
     return (
@@ -44,58 +41,57 @@ function Navbar() {
 
                     {!token && (
 
-                        <>
-                            <ul className="navbar-nav ms-auto">
+                        <ul className="navbar-nav ms-auto">
 
-                                <li className="nav-item">
-                                    <Link className="nav-link" to="/">
-                                        Home
-                                    </Link>
-                                </li>
+                            <li className="nav-item">
+                                <Link className="nav-link" to="/">
+                                    Home
+                                </Link>
+                            </li>
 
-                                <li className="nav-item">
-                                    <Link className="nav-link" to="/login">
-                                        Login
-                                    </Link>
-                                </li>
+                            <li className="nav-item">
+                                <Link className="nav-link" to="/login">
+                                    Login
+                                </Link>
+                            </li>
 
-                                <li className="nav-item dropdown">
+                            <li className="nav-item dropdown">
 
-                                    <a
-                                        className="nav-link dropdown-toggle"
-                                        href="#"
-                                        role="button"
-                                        data-bs-toggle="dropdown"
-                                    >
-                                        Register
-                                    </a>
+                                <a
+                                    className="nav-link dropdown-toggle"
+                                    href="#"
+                                    role="button"
+                                    data-bs-toggle="dropdown"
+                                >
+                                    Register
+                                </a>
 
-                                    <ul className="dropdown-menu">
+                                <ul className="dropdown-menu">
 
-                                        <li>
-                                            <Link
-                                                className="dropdown-item"
-                                                to="/student-register"
-                                            >
-                                                Student Register
-                                            </Link>
-                                        </li>
+                                    <li>
+                                        <Link
+                                            className="dropdown-item"
+                                            to="/student-register"
+                                        >
+                                            Student Register
+                                        </Link>
+                                    </li>
 
-                                        <li>
-                                            <Link
-                                                className="dropdown-item"
-                                                to="/recruiter-register"
-                                            >
-                                                Recruiter Register
-                                            </Link>
-                                        </li>
+                                    <li>
+                                        <Link
+                                            className="dropdown-item"
+                                            to="/recruiter-register"
+                                        >
+                                            Recruiter Register
+                                        </Link>
+                                    </li>
 
-                                    </ul>
+                                </ul>
 
-                                </li>
+                            </li>
 
-                            </ul>
-                        </>
+                        </ul>
+
                     )}
 
                     {/* Student Navbar */}
@@ -105,46 +101,31 @@ function Navbar() {
                         <ul className="navbar-nav ms-auto">
 
                             <li className="nav-item">
-                                <Link
-                                    className="nav-link"
-                                    to="/student-dashboard"
-                                >
+                                <Link className="nav-link" to="/student-dashboard">
                                     Dashboard
                                 </Link>
                             </li>
 
                             <li className="nav-item">
-                                <Link
-                                    className="nav-link"
-                                    to="/companies"
-                                >
+                                <Link className="nav-link" to="/companies">
                                     Companies
                                 </Link>
                             </li>
 
                             <li className="nav-item">
-                                <Link
-                                    className="nav-link"
-                                    to="/applications"
-                                >
+                                <Link className="nav-link" to="/applications">
                                     Applications
                                 </Link>
                             </li>
 
                             <li className="nav-item">
-                                <Link
-                                    className="nav-link"
-                                    to="/resume"
-                                >
+                                <Link className="nav-link" to="/resume-analyzer">
                                     Resume Analyzer
                                 </Link>
                             </li>
 
                             <li className="nav-item">
-                                <Link
-                                    className="nav-link"
-                                    to="/profile"
-                                >
+                                <Link className="nav-link" to="/profile">
                                     Profile
                                 </Link>
                             </li>
@@ -169,28 +150,19 @@ function Navbar() {
                         <ul className="navbar-nav ms-auto">
 
                             <li className="nav-item">
-                                <Link
-                                    className="nav-link"
-                                    to="/recruiter-dashboard"
-                                >
+                                <Link className="nav-link" to="/recruiter-dashboard">
                                     Dashboard
                                 </Link>
                             </li>
 
                             <li className="nav-item">
-                                <Link
-                                    className="nav-link"
-                                    to="/post-job"
-                                >
+                                <Link className="nav-link" to="/post-job">
                                     Post Jobs
                                 </Link>
                             </li>
 
                             <li className="nav-item">
-                                <Link
-                                    className="nav-link"
-                                    to="/students"
-                                >
+                                <Link className="nav-link" to="/students">
                                     Students
                                 </Link>
                             </li>
@@ -215,37 +187,25 @@ function Navbar() {
                         <ul className="navbar-nav ms-auto">
 
                             <li className="nav-item">
-                                <Link
-                                    className="nav-link"
-                                    to="/admin-dashboard"
-                                >
+                                <Link className="nav-link" to="/admin-dashboard">
                                     Dashboard
                                 </Link>
                             </li>
 
                             <li className="nav-item">
-                                <Link
-                                    className="nav-link"
-                                    to="/manage-students"
-                                >
+                                <Link className="nav-link" to="/manage-students">
                                     Students
                                 </Link>
                             </li>
 
                             <li className="nav-item">
-                                <Link
-                                    className="nav-link"
-                                    to="/manage-recruiters"
-                                >
+                                <Link className="nav-link" to="/manage-recruiters">
                                     Recruiters
                                 </Link>
                             </li>
 
                             <li className="nav-item">
-                                <Link
-                                    className="nav-link"
-                                    to="/manage-companies"
-                                >
+                                <Link className="nav-link" to="/manage-companies">
                                     Companies
                                 </Link>
                             </li>

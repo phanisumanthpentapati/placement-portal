@@ -104,7 +104,10 @@ public class SecurityConfig {
                                 "/api/auth/**",
                                 "/api/students/**",
                                 "/api/recruiters/**",
-                                "/companies/**",
+                                "/api/companies/**",
+                                "/api/applications/**",
+                                "/api/resume/**",
+                                "/api/matching/**",
                                 "/images/**"
                         ).permitAll()
 

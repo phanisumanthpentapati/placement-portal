@@ -8,28 +8,39 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@RequestMapping("/api/applications")
+@CrossOrigin(origins = "http://localhost:5173")
 public class ApplicationController {
 
     @Autowired
     private ApplicationService applicationService;
 
-    @GetMapping("/applications")
+    // Get all applications
+    @GetMapping
     public List<Application> getAllApplications() {
         return applicationService.getAllApplications();
     }
 
-    @GetMapping("/applications/{id}")
+    // Get applications of a student
+    @GetMapping("/student/{studentId}")
+    public List<Application> getStudentApplications(@PathVariable Long studentId) {
+        return applicationService.getApplicationsByStudentId(studentId);
+    }
+
+    // Get application by ID
+    @GetMapping("/{id}")
     public Application getApplicationById(@PathVariable Long id) {
         return applicationService.getApplicationById(id);
     }
 
-    @PostMapping("/applications")
-    public Application addApplication(
-            @RequestBody Application application) {
+    // Submit application
+    @PostMapping
+    public Application addApplication(@RequestBody Application application) {
         return applicationService.saveApplication(application);
     }
 
-    @PutMapping("/applications/{id}")
+    // Update application
+    @PutMapping("/{id}")
     public Application updateApplication(
             @PathVariable Long id,
             @RequestBody Application application) {
@@ -37,11 +48,10 @@ public class ApplicationController {
         return applicationService.updateApplication(id, application);
     }
 
-    @DeleteMapping("/applications/{id}")
+    // Delete application
+    @DeleteMapping("/{id}")
     public String deleteApplication(@PathVariable Long id) {
-
         applicationService.deleteApplication(id);
-
         return "Application Deleted Successfully";
     }
 }

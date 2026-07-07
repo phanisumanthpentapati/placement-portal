@@ -1,22 +1,55 @@
-    import axios from "axios";
+import axios from "axios";
 
-    const api = axios.create({
-        baseURL: "http://localhost:8080",
-        headers: {
-            "Content-Type": "application/json"
-        }
-    });
+const api = axios.create({
+  baseURL: "http://localhost:8080/api",
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
 
-    api.interceptors.request.use((config) => {
+// Add JWT token to every request
+api.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem("token");
 
-        const token = localStorage.getItem("token");
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
 
-        if(token){
-            config.headers.Authorization=`Bearer ${token}`;
-        }
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
 
-        return config;
+// Handle unauthorized responses
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response) {
+      switch (error.response.status) {
+        case 401:
+          console.log("Unauthorized");
+          break;
 
-    });
+        case 403:
+          console.log("Access Denied");
+          break;
 
-    export default api;
+        case 404:
+          console.log("API Not Found");
+          break;
+
+        case 500:
+          console.log("Internal Server Error");
+          break;
+
+        default:
+          console.log(error.response.data);
+      }
+    }
+
+    return Promise.reject(error);
+  }
+);
+
+export default api;

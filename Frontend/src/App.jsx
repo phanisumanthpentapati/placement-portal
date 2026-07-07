@@ -7,10 +7,15 @@ import RecruiterRegister from "./pages/RecruiterRegister";
 import StudentDashboard from "./pages/StudentDashboard";
 import RecruiterDashboard from "./pages/RecruiterDashboard";
 import AdminDashboard from "./pages/AdminDashboard";
+import CompanyDetails from "./components/CompanyDetails";
+import ApplicationForm from "./pages/ApplicationForm";
+import ResumeAnalyzer from "./pages/ResumeAnalyzer";
+import MyApplications from "./pages/MyApplications";
 
 function App() {
   return (
     <BrowserRouter>
+
       <Routes>
 
         <Route path="/" element={<Home />} />
@@ -33,6 +38,21 @@ function App() {
         />
 
         <Route
+          path="/company/:id"
+          element={<CompanyDetails />}
+        />
+
+        <Route
+          path="/apply/:id"
+          element={<ApplicationForm />}
+        />
+
+        <Route
+          path="/resume-analyzer"
+          element={<ResumeAnalyzer />}
+        />
+
+        <Route
           path="/recruiter-dashboard"
           element={<RecruiterDashboard />}
         />
@@ -41,8 +61,13 @@ function App() {
           path="/admin-dashboard"
           element={<AdminDashboard />}
         />
+        <Route
+            path="/applications"
+            element={<MyApplications />}
+        />
 
       </Routes>
+
     </BrowserRouter>
   );
 }

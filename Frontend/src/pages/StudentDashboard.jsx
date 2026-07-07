@@ -1,145 +1,166 @@
 import { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import api from "../services/api";
+import { useNavigate } from "react-router-dom";
+
+import {
+  FaBuilding,
+  FaFileAlt,
+  FaClipboardCheck,
+  FaBriefcase,
+  FaMapMarkerAlt
+} from "react-icons/fa";
+
+import "./StudentDashboard.css";
 
 function StudentDashboard() {
+  const [companies, setCompanies] = useState([]);
+  const navigate = useNavigate();
 
-    const [companies, setCompanies] = useState([]);
+  useEffect(() => {
+    fetchCompanies();
+  }, []);
 
-    useEffect(() => {
+  const fetchCompanies = async () => {
+    try {
+      const response = await api.get("/companies");
+      setCompanies(response.data);
+    } catch (error) {
+      console.error(error);
+      alert("Unable to load companies");
+    }
+  };
 
-        fetchCompanies();
+  return (
+    <>
+      <Navbar />
 
-    }, []);
+      <div className="container py-4">
 
-    const fetchCompanies = async () => {
+        {/* Welcome */}
 
-        try {
+        <div className="welcome-section mb-5">
+          <h2 className="fw-bold">
+            Welcome Back 👋
+          </h2>
 
-            const response = await api.get("/companies");
+          <p className="text-muted">
+            Explore top companies, apply for opportunities, and track your placement journey.
+          </p>
+        </div>
 
-            setCompanies(response.data);
+        {/* Statistics */}
 
-        } catch (error) {
+        <div className="row g-4 mb-5">
 
-            console.error(error);
-
-            alert("Unable to load companies");
-
-        }
-
-    };
-
-    return (
-        <>
-            <Navbar />
-
-            <div className="container mt-5">
-
-                <h2 className="mb-4">
-                    Welcome Student 👋
-                </h2>
-
-                <div className="row">
-
-                    <div className="col-md-3 mb-4">
-                        <div className="card shadow text-center p-4">
-                            <h4>🏢</h4>
-                            <h5>Companies</h5>
-                            <p>View Available Jobs</p>
-                        </div>
-                    </div>
-
-                    <div className="col-md-3 mb-4">
-                        <div className="card shadow text-center p-4">
-                            <h4>📄</h4>
-                            <h5>Applications</h5>
-                            <p>Track Applications</p>
-                        </div>
-                    </div>
-
-                    <div className="col-md-3 mb-4">
-                        <div className="card shadow text-center p-4">
-                            <h4>🤖</h4>
-                            <h5>Resume Analyzer</h5>
-                            <p>Analyze Resume</p>
-                        </div>
-                    </div>
-
-                    <div className="col-md-3 mb-4">
-                        <div className="card shadow text-center p-4">
-                            <h4>📚</h4>
-                            <h5>Preparation</h5>
-                            <p>Aptitude & Coding</p>
-                        </div>
-                    </div>
-
-                </div>
-
-                <hr />
-
-                <h3 className="mb-4">
-                    Latest Companies
-                </h3>
-
-                <div className="row">
-
-                    {companies.map((company) => (
-
-                        <div
-                            className="col-md-4 mb-4"
-                            key={company.id}
-                        >
-
-                            <div className="card shadow h-100">
-
-                                <div className="card-body">
-
-                                    <h4 className="text-primary">
-                                        {company.companyName}
-                                    </h4>
-
-                                    <hr />
-
-                                    <p>
-                                        <strong>Role :</strong>{" "}
-                                        {company.jobRole}
-                                    </p>
-
-                                    <p>
-                                        <strong>Package :</strong>{" "}
-                                        {company.packageLpa} LPA
-                                    </p>
-
-                                    <p>
-                                        <strong>Minimum CGPA :</strong>{" "}
-                                        {company.eligibilityCgpa}
-                                    </p>
-
-                                    <p>
-                                        <strong>Location :</strong>{" "}
-                                        {company.location}
-                                    </p>
-
-                                    <button
-                                        className="btn btn-success w-100"
-                                    >
-                                        Apply Now
-                                    </button>
-
-                                </div>
-
-                            </div>
-
-                        </div>
-
-                    ))}
-
-                </div>
-
+          <div className="col-lg-3 col-md-6">
+            <div className="dashboard-card">
+              <FaBuilding className="dashboard-icon text-primary" />
+              <h3>{companies.length}</h3>
+              <p>Total Companies</p>
             </div>
-        </>
-    );
-}
+          </div>
 
-export default StudentDashboard;
+          <div className="col-lg-3 col-md-6">
+            <div className="dashboard-card">
+              <FaFileAlt className="dashboard-icon text-success" />
+              <h3>0</h3>
+              <p>Applications</p>
+            </div>
+          </div>
+
+          <div className="col-lg-3 col-md-6">
+            <div className="dashboard-card">
+              <FaClipboardCheck className="dashboard-icon text-warning" />
+              <h3>0</h3>
+              <p>Interviews</p>
+            </div>
+          </div>
+
+          <div className="col-lg-3 col-md-6">
+            <div className="dashboard-card">
+              🤖
+              <h3>--</h3>
+              <p>Resume Score</p>
+            </div>
+          </div>
+
+        </div>
+
+             <div className="row g-4">
+
+                 {companies.map((company) => (
+
+                     <div
+                         className="col-lg-4 col-md-6"
+                         key={company.id}
+                     >
+
+                         <div className="company-card">
+
+                             <div className="company-image">
+
+                                 <img
+                                     src={`http://localhost:8080/images/${company.image}`}
+                                     alt={company.companyName}
+                                     className="company-logo"
+                                 />
+
+                             </div>
+
+                             <div className="card-body">
+
+                                 <h3 className="company-title">
+                                     {company.companyName}
+                                 </h3>
+
+                                 <p className="company-description">
+                                     {company.description}
+                                 </p>
+
+                                 <div className="company-meta">
+
+                                     <div className="meta-item">
+
+                                         <FaBriefcase className="meta-icon" />
+
+                                         Multiple Roles
+
+                                     </div>
+
+                                     <div className="meta-item">
+
+                                         <FaMapMarkerAlt className="meta-icon" />
+
+                                         Across India
+
+                                     </div>
+
+                                 </div>
+
+                                 <button
+                                     className="view-btn"
+                                     onClick={() => navigate(`/company/${company.id}`)}
+                                 >
+                                     View Details
+                                     <span className="arrow ms-2">→</span>
+                                 </button>
+
+                             </div>
+
+                         </div>
+
+                     </div>
+
+                 ))}
+
+             </div>
+
+             </div>
+
+             </>
+
+             );
+             }
+
+             export default StudentDashboard;

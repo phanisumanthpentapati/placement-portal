@@ -1,5 +1,4 @@
     package com.sumanth.placementportal.controller;
-    import com.sumanth.placementportal.service.EmailService;
     import com.sumanth.placementportal.entity.Application;
     import com.sumanth.placementportal.entity.Resume;
     import com.sumanth.placementportal.entity.User;
@@ -8,6 +7,7 @@
     import com.sumanth.placementportal.repository.ResumeRepository;
     import com.sumanth.placementportal.repository.UserRepository;
     import com.sumanth.placementportal.service.UserService;
+    import com.sumanth.placementportal.service.EmailService;
 
     import org.springframework.beans.factory.annotation.Autowired;
     import org.springframework.security.authentication.AuthenticationManager;

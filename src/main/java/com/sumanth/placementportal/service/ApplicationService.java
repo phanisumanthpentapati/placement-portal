@@ -13,29 +13,49 @@ public class ApplicationService {
     @Autowired
     private ApplicationRepository applicationRepository;
 
+    @Autowired
+    private EmailService emailService;
+
     public List<Application> getAllApplications() {
         return applicationRepository.findAll();
     }
 
+    public List<Application> getApplicationsByStudentId(Long studentId) {
+        return applicationRepository.findByStudentId(studentId);
+    }
+
     public Application saveApplication(Application application) {
-        return applicationRepository.save(application);
+
+        Application savedApplication =
+                applicationRepository.save(application);
+
+        // Send confirmation email
+        emailService.sendSelectionMail(application.getEmail());
+
+        return savedApplication;
     }
 
     public Application getApplicationById(Long id) {
         return applicationRepository.findById(id).orElse(null);
     }
 
-    public Application updateApplication(Long id, Application updatedApplication) {
+    public Application updateApplication(Long id,
+                                         Application updatedApplication) {
 
         Application application =
                 applicationRepository.findById(id).orElse(null);
 
-        if(application != null) {
+        if (application != null) {
 
             application.setStudentId(updatedApplication.getStudentId());
             application.setDriveId(updatedApplication.getDriveId());
-            application.setApplicationStatus(
-                    updatedApplication.getApplicationStatus());
+            application.setApplicationStatus(updatedApplication.getApplicationStatus());
+            application.setFullName(updatedApplication.getFullName());
+            application.setEmail(updatedApplication.getEmail());
+            application.setPhone(updatedApplication.getPhone());
+            application.setBranch(updatedApplication.getBranch());
+            application.setCgpa(updatedApplication.getCgpa());
+            application.setCoverLetter(updatedApplication.getCoverLetter());
 
             return applicationRepository.save(application);
         }
