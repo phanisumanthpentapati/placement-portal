@@ -16,6 +16,9 @@ public class ApplicationService {
     @Autowired
     private EmailService emailService;
 
+    @Autowired
+    private NotificationService notificationService;
+
     public List<Application> getAllApplications() {
         return applicationRepository.findAll();
     }
@@ -26,11 +29,21 @@ public class ApplicationService {
 
     public Application saveApplication(Application application) {
 
+        // Save application
         Application savedApplication =
                 applicationRepository.save(application);
 
-        // Send confirmation email
+        // Send email notification
         emailService.sendSelectionMail(application.getEmail());
+
+        // Save in-app notification
+        notificationService.createNotification(
+                application.getStudentId(),
+                "Application Submitted",
+                "Your application for Company ID "
+                        + application.getDriveId()
+                        + " has been submitted successfully."
+        );
 
         return savedApplication;
     }
@@ -39,8 +52,9 @@ public class ApplicationService {
         return applicationRepository.findById(id).orElse(null);
     }
 
-    public Application updateApplication(Long id,
-                                         Application updatedApplication) {
+    public Application updateApplication(
+            Long id,
+            Application updatedApplication) {
 
         Application application =
                 applicationRepository.findById(id).orElse(null);

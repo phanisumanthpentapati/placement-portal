@@ -6,10 +6,11 @@ import com.sumanth.placementportal.repository.CompanyRepository;
 import com.sumanth.placementportal.repository.PlacementDriveRepository;
 import com.sumanth.placementportal.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequestMapping("/api/dashboard")
+@CrossOrigin(origins = "http://localhost:5173")
 public class DashboardController {
 
     @Autowired
@@ -24,7 +25,7 @@ public class DashboardController {
     @Autowired
     private ApplicationRepository applicationRepository;
 
-    @GetMapping("/dashboard")
+    @GetMapping
     public DashboardDTO getDashboard() {
 
         return new DashboardDTO(
@@ -33,5 +34,7 @@ public class DashboardController {
                 placementDriveRepository.count(),
                 applicationRepository.count()
         );
+
     }
+
 }

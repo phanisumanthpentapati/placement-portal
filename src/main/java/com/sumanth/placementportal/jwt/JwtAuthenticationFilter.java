@@ -15,7 +15,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.util.Enumeration;
 
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
@@ -33,27 +32,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             FilterChain filterChain)
             throws ServletException, IOException {
 
-        // Print all request headers (Optional)
-        Enumeration<String> headerNames = request.getHeaderNames();
-
-        while (headerNames.hasMoreElements()) {
-            String header = headerNames.nextElement();
-            System.out.println(header + " = " + request.getHeader(header));
-        }
-
         String path = request.getServletPath();
 
         System.out.println("Request Path : " + path);
 
-        // Public APIs (Skip JWT)
+        // Skip JWT only for public APIs
         if (path.equals("/")
-                || path.startsWith("/api")
-                || path.equals("/login")
-                || path.equals("/register")
-                || path.equals("/token")
+                || path.startsWith("/api/auth")
                 || path.startsWith("/images")) {
-
-            System.out.println("Public API - JWT Skipped");
 
             filterChain.doFilter(request, response);
             return;
@@ -61,19 +47,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         String authHeader = request.getHeader("Authorization");
 
-        System.out.println("Authorization Header : " + authHeader);
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
 
-        String token = null;
-        String email = null;
-
-        if (authHeader != null && authHeader.startsWith("Bearer ")) {
-
-            token = authHeader.substring(7);
-
-            email = jwtService.extractUsername(token);
-
-            System.out.println("Email : " + email);
+            filterChain.doFilter(request, response);
+            return;
         }
+
+        String token = authHeader.substring(7);
+
+        String email = jwtService.extractUsername(token);
 
         if (email != null &&
                 SecurityContextHolder.getContext().getAuthentication() == null) {

@@ -11,9 +11,13 @@ import CompanyDetails from "./components/CompanyDetails";
 import ApplicationForm from "./pages/ApplicationForm";
 import ResumeAnalyzer from "./pages/ResumeAnalyzer";
 import MyApplications from "./pages/MyApplications";
+import Profile from "./pages/Profile";
+import Notifications from "./pages/Notifications";
 
 function App() {
+
   return (
+
     <BrowserRouter>
 
       <Routes>
@@ -53,6 +57,16 @@ function App() {
         />
 
         <Route
+          path="/applications"
+          element={<MyApplications />}
+        />
+
+        <Route
+          path="/profile"
+          element={<Profile />}
+        />
+
+        <Route
           path="/recruiter-dashboard"
           element={<RecruiterDashboard />}
         />
@@ -61,15 +75,18 @@ function App() {
           path="/admin-dashboard"
           element={<AdminDashboard />}
         />
+
         <Route
-            path="/applications"
-            element={<MyApplications />}
+            path="/notifications"
+            element={<Notifications />}
         />
 
       </Routes>
 
     </BrowserRouter>
+
   );
+
 }
 
 export default App;

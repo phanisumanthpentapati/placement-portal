@@ -108,17 +108,18 @@ public class SecurityConfig {
                                 "/api/applications/**",
                                 "/api/resume/**",
                                 "/api/matching/**",
+                                "/api/dashboard/**",
                                 "/images/**"
                         ).permitAll()
 
-                        .requestMatchers("/admin/**")
-                        .hasRole("ADMIN")
-
-                        .requestMatchers("/student/**")
+                        .requestMatchers("/api/student/**")
                         .hasRole("STUDENT")
 
-                        .requestMatchers("/recruiter/**")
+                        .requestMatchers("/api/recruiter/**")
                         .hasRole("RECRUITER")
+
+                        .requestMatchers("/api/admin/**")
+                        .hasRole("ADMIN")
 
                         .anyRequest()
                         .authenticated()

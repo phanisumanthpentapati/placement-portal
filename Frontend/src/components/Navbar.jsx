@@ -8,9 +8,12 @@ function Navbar() {
     const role = localStorage.getItem("role");
 
     const logout = () => {
+
         localStorage.removeItem("token");
         localStorage.removeItem("role");
+
         navigate("/");
+
     };
 
     return (
@@ -19,7 +22,10 @@ function Navbar() {
 
             <div className="container">
 
-                <Link className="navbar-brand fw-bold fs-3" to="/">
+                <Link
+                    className="navbar-brand fw-bold fs-3"
+                    to="/"
+                >
                     Placement Portal
                 </Link>
 
@@ -96,7 +102,7 @@ function Navbar() {
 
                     {/* Student Navbar */}
 
-                    {token && role === "student" && (
+                    {token && role?.toUpperCase() === "STUDENT" && (
 
                         <ul className="navbar-nav ms-auto">
 
@@ -107,14 +113,14 @@ function Navbar() {
                             </li>
 
                             <li className="nav-item">
-                                <Link className="nav-link" to="/companies">
-                                    Companies
+                                <Link className="nav-link" to="/applications">
+                                    My Applications
                                 </Link>
                             </li>
 
                             <li className="nav-item">
-                                <Link className="nav-link" to="/applications">
-                                    Applications
+                                <Link className="nav-link" to="/notifications">
+                                    🔔 Notifications
                                 </Link>
                             </li>
 
@@ -145,7 +151,7 @@ function Navbar() {
 
                     {/* Recruiter Navbar */}
 
-                    {token && role === "recruiter" && (
+                    {token && role?.toUpperCase() === "RECRUITER" && (
 
                         <ul className="navbar-nav ms-auto">
 
@@ -182,7 +188,7 @@ function Navbar() {
 
                     {/* Admin Navbar */}
 
-                    {token && role === "admin" && (
+                    {token && role?.toUpperCase() === "ADMIN" && (
 
                         <ul className="navbar-nav ms-auto">
 
@@ -211,6 +217,12 @@ function Navbar() {
                             </li>
 
                             <li className="nav-item">
+                                <Link className="nav-link" to="/profile">
+                                    Profile
+                                </Link>
+                            </li>
+
+                            <li className="nav-item">
                                 <button
                                     className="btn btn-warning ms-3"
                                     onClick={logout}
@@ -230,6 +242,7 @@ function Navbar() {
         </nav>
 
     );
+
 }
 
 export default Navbar;

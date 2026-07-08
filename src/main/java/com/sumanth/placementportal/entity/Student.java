@@ -11,12 +11,21 @@ public class Student {
     private Long id;
 
     private String name;
+
     private String email;
+
     private String branch;
+
     private Double cgpa;
+
     private String password;
 
-    // Getters and Setters
+    private String phone;
+
+    private Integer graduationYear;
+
+    public Student() {
+    }
 
     public Long getId() {
         return id;
@@ -64,5 +73,21 @@ public class Student {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public Integer getGraduationYear() {
+        return graduationYear;
+    }
+
+    public void setGraduationYear(Integer graduationYear) {
+        this.graduationYear = graduationYear;
     }
 }
