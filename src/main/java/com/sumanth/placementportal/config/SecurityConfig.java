@@ -66,7 +66,10 @@ public class SecurityConfig {
             CorsConfiguration configuration = new CorsConfiguration();
 
             configuration.setAllowedOrigins(
-                    Arrays.asList("http://localhost:5173")
+                    Arrays.asList(
+                            "http://localhost:5173",
+                            "https://placement-portal-cyan-tau.vercel.app"
+                    )
             );
 
             configuration.setAllowedMethods(
