@@ -79,8 +79,7 @@
             } catch (Exception e) {
 
                 e.printStackTrace();
-
-                throw new RuntimeException(e.getMessage());
+                throw new RuntimeException("Login Failed : " + e.getMessage());
             }
 
             User loggedUser =
