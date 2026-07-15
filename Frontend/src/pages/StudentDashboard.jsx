@@ -40,12 +40,10 @@ function StudentDashboard() {
 
       <div className="container py-4">
 
-        {/* Welcome */}
+        {/* Welcome Section */}
 
         <div className="welcome-section mb-5">
-          <h2 className="fw-bold">
-            Welcome Back 👋
-          </h2>
+          <h2 className="fw-bold">Welcome Back 👋</h2>
 
           <p className="text-muted">
             Explore top companies, apply for opportunities, and track your placement journey.
@@ -105,13 +103,15 @@ function StudentDashboard() {
 
                 <div className="company-image">
 
-                 const BACKEND_URL = "https://placement-portal-x5j7.onrender.com";
-
-                 <img
-                   src={`${BACKEND_URL}/${company.image}`}
-                   alt={company.companyName}
-                   className="company-logo"
-                 />
+                  <img
+                    src={`${BACKEND_URL}/images/${company.image}`}
+                    alt={company.companyName}
+                    className="company-logo"
+                    onError={(e) => {
+                      e.target.src =
+                        "https://via.placeholder.com/350x200?text=Company";
+                    }}
+                  />
 
                 </div>
 

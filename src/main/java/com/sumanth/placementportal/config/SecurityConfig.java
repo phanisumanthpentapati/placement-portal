@@ -102,9 +102,15 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
                                 "/",
-                                "/api",
-                                "/api/",
                                 "/error",
+                                "/images/**",
+                                "/**/*.png",
+                                "/**/*.jpg",
+                                "/**/*.jpeg",
+                                "/**/*.gif",
+                                "/**/*.svg",
+
+                                "/api/**",
                                 "/api/auth/**",
                                 "/api/students/**",
                                 "/api/recruiters/**",
@@ -112,8 +118,7 @@ public class SecurityConfig {
                                 "/api/applications/**",
                                 "/api/resume/**",
                                 "/api/matching/**",
-                                "/api/dashboard/**",
-                                "/images/**"
+                                "/api/dashboard/**"
                         ).permitAll()
 
                         .requestMatchers("/api/student/**")
