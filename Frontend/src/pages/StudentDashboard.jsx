@@ -105,15 +105,13 @@ function StudentDashboard() {
 
                 <div className="company-image">
 
-                  <img
-                    src={`${BACKEND_URL}/images/${company.image}`}
-                    alt={company.companyName}
-                    className="company-logo"
-                    onError={(e) => {
-                      e.target.src =
-                        "https://via.placeholder.com/250x150?text=No+Logo";
-                    }}
-                  />
+                 const BACKEND_URL = "https://placement-portal-x5j7.onrender.com";
+
+                 <img
+                   src={`${BACKEND_URL}/${company.image}`}
+                   alt={company.companyName}
+                   className="company-logo"
+                 />
 
                 </div>
 
