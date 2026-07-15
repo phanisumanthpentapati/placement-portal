@@ -24,16 +24,19 @@ function Login() {
                 password
             });
 
-            // Backend returns JWT Token
-            const token = response.data;
+            console.log("Login Response:", response.data);
 
-            // Save token & role
+            // Supports both plain token and JSON response
+            const token =
+                response.data.token ||
+                response.data.jwt ||
+                response.data;
+
             localStorage.setItem("token", token);
             localStorage.setItem("role", role);
 
             alert("Login Successful");
 
-            // Navigate based on selected role
             switch (role) {
 
                 case "student":
@@ -57,12 +60,32 @@ function Login() {
             console.error("Login Error:", error);
 
             if (error.response) {
-                alert(error.response.data);
+
+                console.log("Status:", error.response.status);
+                console.log("Response:", error.response.data);
+
+                if (typeof error.response.data === "string") {
+
+                    alert(error.response.data);
+
+                } else if (error.response.data.message) {
+
+                    alert(error.response.data.message);
+
+                } else {
+
+                    alert(JSON.stringify(error.response.data, null, 2));
+
+                }
+
             } else {
+
                 alert("Unable to connect to the server.");
+
             }
 
         }
+
     };
 
     return (
@@ -79,13 +102,8 @@ function Login() {
                             Login
                         </h2>
 
-                        {/* Email */}
-
                         <div className="mb-3">
-
-                            <label className="form-label">
-                                Email
-                            </label>
+                            <label className="form-label">Email</label>
 
                             <input
                                 type="email"
@@ -94,16 +112,10 @@ function Login() {
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                             />
-
                         </div>
 
-                        {/* Password */}
-
                         <div className="mb-3">
-
-                            <label className="form-label">
-                                Password
-                            </label>
+                            <label className="form-label">Password</label>
 
                             <input
                                 type="password"
@@ -112,40 +124,21 @@ function Login() {
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                             />
-
                         </div>
 
-                        {/* Role */}
-
                         <div className="mb-3">
-
-                            <label className="form-label">
-                                Login As
-                            </label>
+                            <label className="form-label">Login As</label>
 
                             <select
                                 className="form-select"
                                 value={role}
                                 onChange={(e) => setRole(e.target.value)}
                             >
-
-                                <option value="student">
-                                    Student
-                                </option>
-
-                                <option value="recruiter">
-                                    Recruiter
-                                </option>
-
-                                <option value="admin">
-                                    Admin
-                                </option>
-
+                                <option value="student">Student</option>
+                                <option value="recruiter">Recruiter</option>
+                                <option value="admin">Admin</option>
                             </select>
-
                         </div>
-
-                        {/* Login Button */}
 
                         <button
                             className="btn btn-primary w-100"
@@ -153,8 +146,6 @@ function Login() {
                         >
                             Login
                         </button>
-
-                        {/* Links */}
 
                         <div className="text-center mt-3">
 
