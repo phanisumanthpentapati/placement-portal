@@ -67,12 +67,21 @@
         @PostMapping("/login")
         public String login(@RequestBody User user) {
 
-            authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(
-                            user.getEmail(),
-                            user.getPassword()
-                    )
-            );
+            try {
+
+                authenticationManager.authenticate(
+                        new UsernamePasswordAuthenticationToken(
+                                user.getEmail(),
+                                user.getPassword()
+                        )
+                );
+
+            } catch (Exception e) {
+
+                e.printStackTrace();
+
+                throw new RuntimeException(e.getMessage());
+            }
 
             User loggedUser =
                     userRepository.findByEmail(user.getEmail())
