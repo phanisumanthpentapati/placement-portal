@@ -14,6 +14,9 @@ import {
 import "./StudentDashboard.css";
 
 function StudentDashboard() {
+
+  const BACKEND_URL = "https://placement-portal-x5j7.onrender.com";
+
   const [companies, setCompanies] = useState([]);
   const navigate = useNavigate();
 
@@ -87,80 +90,79 @@ function StudentDashboard() {
 
         </div>
 
-             <div className="row g-4">
+        {/* Companies */}
 
-                 {companies.map((company) => (
+        <div className="row g-4">
 
-                     <div
-                         className="col-lg-4 col-md-6"
-                         key={company.id}
-                     >
+          {companies.map((company) => (
 
-                         <div className="company-card">
+            <div
+              className="col-lg-4 col-md-6"
+              key={company.id}
+            >
 
-                             <div className="company-image">
+              <div className="company-card">
 
-                                 <img
-                                     src={`http://localhost:8080/images/${company.image}`}
-                                     alt={company.companyName}
-                                     className="company-logo"
-                                 />
+                <div className="company-image">
 
-                             </div>
+                  <img
+                    src={`${BACKEND_URL}/images/${company.image}`}
+                    alt={company.companyName}
+                    className="company-logo"
+                    onError={(e) => {
+                      e.target.src =
+                        "https://via.placeholder.com/250x150?text=No+Logo";
+                    }}
+                  />
 
-                             <div className="card-body">
+                </div>
 
-                                 <h3 className="company-title">
-                                     {company.companyName}
-                                 </h3>
+                <div className="card-body">
 
-                                 <p className="company-description">
-                                     {company.description}
-                                 </p>
+                  <h3 className="company-title">
+                    {company.companyName}
+                  </h3>
 
-                                 <div className="company-meta">
+                  <p className="company-description">
+                    {company.description}
+                  </p>
 
-                                     <div className="meta-item">
+                  <div className="company-meta">
 
-                                         <FaBriefcase className="meta-icon" />
+                    <div className="meta-item">
+                      <FaBriefcase className="meta-icon" />
+                      Multiple Roles
+                    </div>
 
-                                         Multiple Roles
+                    <div className="meta-item">
+                      <FaMapMarkerAlt className="meta-icon" />
+                      Across India
+                    </div>
 
-                                     </div>
+                  </div>
 
-                                     <div className="meta-item">
+                  <button
+                    className="view-btn"
+                    onClick={() => navigate(`/company/${company.id}`)}
+                  >
+                    View Details
+                    <span className="arrow ms-2">→</span>
+                  </button>
 
-                                         <FaMapMarkerAlt className="meta-icon" />
+                </div>
 
-                                         Across India
+              </div>
 
-                                     </div>
+            </div>
 
-                                 </div>
+          ))}
 
-                                 <button
-                                     className="view-btn"
-                                     onClick={() => navigate(`/company/${company.id}`)}
-                                 >
-                                     View Details
-                                     <span className="arrow ms-2">→</span>
-                                 </button>
+        </div>
 
-                             </div>
+      </div>
 
-                         </div>
+    </>
+  );
+}
 
-                     </div>
-
-                 ))}
-
-             </div>
-
-             </div>
-
-             </>
-
-             );
-             }
-
-             export default StudentDashboard;
+export default StudentDashboard;
