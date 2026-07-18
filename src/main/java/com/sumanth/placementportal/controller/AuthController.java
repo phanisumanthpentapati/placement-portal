@@ -64,36 +64,36 @@
 
         // ================= LOGIN =================
 
+        // ================= LOGIN =================
+
         @PostMapping("/login")
         public String login(@RequestBody User user) {
 
-            try {
+            System.out.println("========== LOGIN REQUEST ==========");
+            System.out.println("Email = " + user.getEmail());
 
-                authenticationManager.authenticate(
-                        new UsernamePasswordAuthenticationToken(
-                                user.getEmail(),
-                                user.getPassword()
-                        )
-                );
+            // Authenticate user
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            user.getEmail(),
+                            user.getPassword()
+                    )
+            );
 
-            } catch (Exception e) {
+            // Fetch user from database
+            User loggedUser = userRepository.findByEmail(user.getEmail())
+                    .orElseThrow(() -> new RuntimeException("User Not Found"));
 
-                e.printStackTrace();
-                throw new RuntimeException("Login Failed : " + e.getMessage());
-            }
+            System.out.println("User Found = " + loggedUser.getEmail());
+            System.out.println("Role = " + loggedUser.getRole());
 
-            User loggedUser =
-                    userRepository.findByEmail(user.getEmail())
-                            .orElseThrow(() ->
-                                    new RuntimeException("User Not Found"));
+            // Generate JWT
+            String token = jwtService.generateToken(loggedUser.getEmail());
 
-            return jwtService.generateToken(loggedUser.getEmail());
-        }
-        @PostMapping("/recruiter/job")
-        public JobDescription createJob(
-                @RequestBody JobDescription job) {
+            System.out.println("JWT Generated Successfully");
+            System.out.println("==============================");
 
-            return jobDescriptionRepository.save(job);
+            return token;
         }
 
         // ================= TOKEN =================
