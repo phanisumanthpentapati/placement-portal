@@ -98,9 +98,14 @@
 
         // ================= TOKEN =================
 
+        // ================= TOKEN =================
+
         @GetMapping("/token")
         public String getToken() {
-            return jwtService.generateToken("admin@gmail.com");
+
+            System.out.println("Token endpoint called");
+
+            return "Working";
         }
 
         // ================= USERS =================
