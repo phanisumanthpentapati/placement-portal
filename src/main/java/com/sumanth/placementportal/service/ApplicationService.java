@@ -19,45 +19,54 @@ public class ApplicationService {
     @Autowired
     private NotificationService notificationService;
 
+    // Get all applications
     public List<Application> getAllApplications() {
         return applicationRepository.findAll();
     }
 
+    // Get applications by student ID
     public List<Application> getApplicationsByStudentId(Long studentId) {
         return applicationRepository.findByStudentId(studentId);
     }
 
+    // Save application
     public Application saveApplication(Application application) {
 
-        // Save application
-        Application savedApplication =
-                applicationRepository.save(application);
+        // Save application in database
+        Application savedApplication = applicationRepository.save(application);
 
-        // Send email notification
-        emailService.sendSelectionMail(application.getEmail());
+        // Send email (don't fail if email has an error)
+        try {
+            emailService.sendSelectionMail(application.getEmail());
+        } catch (Exception e) {
+            System.out.println("Email sending failed: " + e.getMessage());
+        }
 
-        // Save in-app notification
-        notificationService.createNotification(
-                application.getStudentId(),
-                "Application Submitted",
-                "Your application for Company ID "
-                        + application.getDriveId()
-                        + " has been submitted successfully."
-        );
+        // Save notification (don't fail if notification has an error)
+        try {
+            notificationService.createNotification(
+                    application.getStudentId(),
+                    "Application Submitted",
+                    "Your application for Company ID "
+                            + application.getDriveId()
+                            + " has been submitted successfully."
+            );
+        } catch (Exception e) {
+            System.out.println("Notification creation failed: " + e.getMessage());
+        }
 
         return savedApplication;
     }
 
+    // Get application by ID
     public Application getApplicationById(Long id) {
         return applicationRepository.findById(id).orElse(null);
     }
 
-    public Application updateApplication(
-            Long id,
-            Application updatedApplication) {
+    // Update application
+    public Application updateApplication(Long id, Application updatedApplication) {
 
-        Application application =
-                applicationRepository.findById(id).orElse(null);
+        Application application = applicationRepository.findById(id).orElse(null);
 
         if (application != null) {
 
@@ -77,6 +86,7 @@ public class ApplicationService {
         return null;
     }
 
+    // Delete application
     public void deleteApplication(Long id) {
         applicationRepository.deleteById(id);
     }
